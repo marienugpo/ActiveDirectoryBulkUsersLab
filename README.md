@@ -12,10 +12,20 @@ I followed along using this <a href="https://youtu.be/MHsI8hJmggI?si=rB0beoWKQub
 - <b>PowerShell</b> 
 - <b>Oracle VirtualBox</b>
 
-<h2>Environments Used </h2>
+<h2>Environments Used</h2>
 
 - <b>Windows 10</b> 64-bit
 - <b>Windows 2019 Server</b>
+
+<h2>Overview</h2>
+
+1. Create virtual machine for server (domain controller) using Virtualbox. Assign it two network adapters (internal and outbound). Assign IPv4 address to internal NIC.
+2. Install Active Directory Domain Services and create domain. Create ADMIN organizational unit and admin account.
+3. Install Remote Access Services (RAS) and configure NAT on Internet network adapter.
+4. Set up DHCP and DHCP scope on domain controller.
+5. Run powershell script to create 1000 users in AD.
+6. Create Windows VM and join it to the domain as Client01.
+7. Verify that client can connect to domain using ping or checking DHCP and AD settings on server side.
 
 <h2>Project Walk-through:</h2>
 
@@ -76,6 +86,32 @@ I followed along using this <a href="https://youtu.be/MHsI8hJmggI?si=rB0beoWKQub
 
 
 <h2>Breakdown of the Script</h2>
+
+Full script:
+
+    $PASSWORD_FOR_USERS   = "Password1"
+    $USER_FIRST_LAST_LIST = Get-Content .\names.txt
+
+    $password = ConvertTo-SecureString $PASSWORD_FOR_USERS -AsPlainText -Force
+    New-ADOrganizationalUnit -Name _USERS -ProtectedFromAccidentalDeletion $false
+
+    foreach ($n in $USER_FIRST_LAST_LIST) {
+        $first = $n.Split(" ")[0].ToLower()
+        $last = $n.Split(" ")[1].ToLower()
+        $username = "$($first.Substring(0,1))$($last)".ToLower()
+        Write-Host "Creating user: $($username)" -BackgroundColor Black -ForegroundColor Cyan
+    
+    New-AdUser -AccountPassword $password `
+               -GivenName $first `
+               -Surname $last `
+               -DisplayName $username `
+               -Name $username `
+               -EmployeeID $username `
+               -PasswordNeverExpires $true `
+               -Path "ou=_USERS,$(([ADSI]`"").distinguishedName)" `
+               -Enabled $true
+               
+Breakdown:
     
     $PASSWORD_FOR_USERS   = "Password1"
     $USER_FIRST_LAST_LIST = Get-Content .\names.txt
