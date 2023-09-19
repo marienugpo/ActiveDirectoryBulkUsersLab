@@ -2,9 +2,7 @@
 <h1>Creating Bulk Users Using Powershell</h1>
 
 <h2> Project Description</h2>
-In this first Active Directory project, I virtualized a Windows 2019 Domain Server and Windows 10 machine using VirtualBox. I then ran a powershell script to create 1000 users within Active Directory and configured the template accounts and the server domain settings, TCP/IP, DHCP and NAT settingsto hold certain properties.
-
-I followed along using this <a href="https://youtu.be/MHsI8hJmggI?si=rB0beoWKQubHIXh8/">technical demo</a> by cybersecurity professional and Youtuber, Josh Madakor.
+In this first Active Directory project, I virtualized a Windows 2019 Domain Server and Windows 10 machine using VirtualBox. I then configured the server domain settings, TCP/IP, DHCP and NAT settings to hold certain propertie and ran a powershell script to create 1000 users within Active Directory. Lastly, I created a virtual client and joined it to the domain. I followed along using this <a href="https://youtu.be/MHsI8hJmggI?si=rB0beoWKQubHIXh8/">technical demo</a> by cybersecurity professional and Youtuber, Josh Madakor.
 
 
 <h2>Languages and Utilities Used</h2>
