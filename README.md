@@ -26,38 +26,51 @@ I followed along using this <a href="https://youtu.be/MHsI8hJmggI?si=rB0beoWKQub
 2. Download Windows 10 ISO and Server 2019 ISO. <br/>
 <br />
 <br />
-3. Create Server Domain Controller virtual machine.  <br/>
+3. Create Server Domain Controller virtual machine in VirtualBox and create Internet and Internal network adapters.  <br/>
 <br/>
-  <img src="https://drive.google.com/file/d/1ekM2XdPrui1YJpBnQd4Te7idkXXYiZ2K/view?usp=drive_link" height="80%" width="80%" alt="Create Server VM"/>
-  3a. Give it two network adapters/NIC's. One to connect to the internet (DHCP from home router) <br/>
-  and the other for clients to connect to internally (private network).   <br/>
-<img src=""/>
+<img src="https://i.imgur.com/unMUvL9_d.jpg?maxwidth=520&shape=thumb&fidelity=high"/> <br/>
+<img src="https://i.imgur.com/IIwtMQa_d.jpg?maxwidth=520&shape=thumb&fidelity=high"/> <br/>
+<img src="https://i.imgur.com/BMyuEFc_d.jpg?maxwidth=520&shape=thumb&fidelity=high"/> <br/>
 <br/>
-  3b. Name Server.   <br/>
+<br />
+4. Install Active Directory Domain Services and create domain. <br/>
+<br/>
+<img src="https://i.imgur.com/KPIyirQ_d.jpg?maxwidth=520&shape=thumb&fidelity=high"/> <br/>
+<img src="https://i.imgur.com/HWmBBzt_d.jpg?maxwidth=520&shape=thumb&fidelity=high"/>
 <br />
 <br />
-4. Install Active Directory and create the Domain. <br/>
-<img src=""/>
+5. Create ADMINS organization and admin account. <br/>
+<br/>
+<img src="https://i.imgur.com/rwx9CaZ.png"/> <br/>
+<img src="https://i.imgur.com/K3LjDPa.png"/>
 <br />
 <br />
-5. Configure NAT and routing, so clients on private network can reach the internet through Domain Controller.  <br/>
-<img src=""/>
+6. Install Remote Access Services and configure NAT routing, so clients on private network can reach the internet through Domain Controller.  <br/>
+<br/>
+<img src="https://i.imgur.com/wyXPB84.png"/> <br/>
+<img src="https://i.imgur.com/Ufn5oXY.png"/>
 <br />
 <br />
-6. Set up DHCP on Domain Controller, so Windows 10 machine can automatically get IP address assignment. <br/>
-<img src=""/>
+7. Set up DHCP on Domain Controller and set up DHCP scope, so Windows 10 machine can automatically get IP address assignment. <br/>
+<br/>
+<img src="https://i.imgur.com/tQsOnY5.png"/> <br/>
+<img src="https://i.imgur.com/NW2CXGk.png"/>
 <br />
 <br />
-7. Run powershell script to automatically create 1000 users in Active Directory.  <br/>
-<img src="https://i.imgur.com/K71yaM2.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+8. Run powershell script to automatically create 1000 users in Active Directory (I break down this script in the next section).  <br/>
+<br/>
+<img src="https://i.imgur.com/QBEp6pB.png"/> <br/>
+<img src="https://i.imgur.com/Cz0Ku4f.png"/>
 <br />
 <br />
-8. Create Windows 10 machine and join it to the domain as Client1.  <br/>
-<img src="https://i.imgur.com/K71yaM2.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+9. Create Windows 10 machine and join it to the domain as Client01.  <br/>
+<br/>
+<img src="https://i.imgur.com/4TTRGMg.png"/>
 <br />
 <br />
-9. Log in using user account.  <br/>
-<img src="https://i.imgur.com/K71yaM2.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+10. You can now og in using a user account. Within the domain controller, the client shows up under Address Leases (in DHCP) and Computers (in AD). The domain can also be ping'd when logged into the client machine.  <br/>
+<br/>
+<img src="https://i.imgur.com/HMsGct3.png"/> <br/>
 <br />
 <br />
 
@@ -81,7 +94,8 @@ Takes plain text password and creates a password object for it. Creates organiza
       Write-Host "Creating user: $($username)" -BackgroundColor Black -ForegroundColor Cyan
 "$n" represents each user. Creates spaces between names by splitting them. Takes first character of name and adds it to the beginning of the last name to create a user name (ie. "mnugpo").
 <br />     
-      New-AdUser -AccountPassword $password `
+ 
+    New-AdUser -AccountPassword $password `
                -GivenName $first `
                -Surname $last `
                -DisplayName $username `
